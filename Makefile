@@ -55,23 +55,26 @@ aes128_tests: aes_whitebox_compiler
 	./$@ ofb $(TEST_PLAIN) $(AES128_OFB_TEST_IV) $(AES128_OFB_TEST_CIPHER)
 	./$@ ctr $(TEST_PLAIN) $(AES128_CTR_TEST_NONCE) $(AES128_CTR_TEST_CIPHER)
 
-aes192_tests: aes_whitebox_compiler
-	./aes_whitebox_compiler aes192 $(AES192_KEY)
-	$(CXX) $(CXXFLAGS) -c aes_whitebox.cc -o aes_whitebox.o
-	$(CC) $(CFLAGS) -c aes_tests.c -o aes_tests.o
-	$(CC) $(LDFLAGS) aes_whitebox.o aes_tests.o -o $@
-	./$@ cfb $(TEST_PLAIN) $(AES192_CFB_TEST_IV) $(AES192_CFB_TEST_CIPHER)
-	./$@ ofb $(TEST_PLAIN) $(AES192_OFB_TEST_IV) $(AES192_OFB_TEST_CIPHER)
-	./$@ ctr $(TEST_PLAIN) $(AES192_CTR_TEST_NONCE) $(AES192_CTR_TEST_CIPHER)
+# 因为 aes_whitebox_compiler aes192 $(AES192_KEY)，虽然不同的命令行参数，但最终生成的 aes_whitebox_tables.cc 是同一个文件，
+# 所以用最终 aes_whitebox_compiler aes256 生成的 aes_whitebox_tables.cc，跑 aes_128_test 是无效的 !!!
 
-aes256_tests: aes_whitebox_compiler
-	./aes_whitebox_compiler aes256 $(AES256_KEY)
-	$(CXX) $(CXXFLAGS) -c aes_whitebox.cc -o aes_whitebox.o
-	$(CC) $(CFLAGS) -c aes_tests.c -o aes_tests.o
-	$(CC) $(LDFLAGS) aes_whitebox.o aes_tests.o -o $@
-	./$@ cfb $(TEST_PLAIN) $(AES256_CFB_TEST_IV) $(AES256_CFB_TEST_CIPHER)
-	./$@ ofb $(TEST_PLAIN) $(AES256_OFB_TEST_IV) $(AES256_OFB_TEST_CIPHER)
-	./$@ ctr $(TEST_PLAIN) $(AES256_CTR_TEST_NONCE) $(AES256_CTR_TEST_CIPHER)
+# aes192_tests: aes_whitebox_compiler
+# 	./aes_whitebox_compiler aes192 $(AES192_KEY)
+# 	$(CXX) $(CXXFLAGS) -c aes_whitebox.cc -o aes_whitebox.o
+# 	$(CC) $(CFLAGS) -c aes_tests.c -o aes_tests.o
+# 	$(CC) $(LDFLAGS) aes_whitebox.o aes_tests.o -o $@
+# 	./$@ cfb $(TEST_PLAIN) $(AES192_CFB_TEST_IV) $(AES192_CFB_TEST_CIPHER)
+# 	./$@ ofb $(TEST_PLAIN) $(AES192_OFB_TEST_IV) $(AES192_OFB_TEST_CIPHER)
+# 	./$@ ctr $(TEST_PLAIN) $(AES192_CTR_TEST_NONCE) $(AES192_CTR_TEST_CIPHER)
+
+# aes256_tests: aes_whitebox_compiler
+# 	./aes_whitebox_compiler aes256 $(AES256_KEY)
+# 	$(CXX) $(CXXFLAGS) -c aes_whitebox.cc -o aes_whitebox.o
+# 	$(CC) $(CFLAGS) -c aes_tests.c -o aes_tests.o
+# 	$(CC) $(LDFLAGS) aes_whitebox.o aes_tests.o -o $@
+# 	./$@ cfb $(TEST_PLAIN) $(AES256_CFB_TEST_IV) $(AES256_CFB_TEST_CIPHER)
+# 	./$@ ofb $(TEST_PLAIN) $(AES256_OFB_TEST_IV) $(AES256_OFB_TEST_CIPHER)
+# 	./$@ ctr $(TEST_PLAIN) $(AES256_CTR_TEST_NONCE) $(AES256_CTR_TEST_CIPHER)
 
 clean:
 	rm -f *.o *.a aes_whitebox_tables.cc aes_whitebox_compiler aes128_tests aes192_tests aes256_tests
