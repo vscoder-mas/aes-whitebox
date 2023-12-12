@@ -14,6 +14,11 @@ static void read_hex(const char *in, uint8_t* v, size_t size, const char* param_
   }
 }
 
+/**
+ * 自定义生成 aes_whitebox_tables.cc 
+ * g++ aes_whitebox_compiler.cc -o aes_whitebox_compiler -lntl -std=c++11
+ * ./aes_whitebox_compiler aes128 60bd4de930f4f63d1234567890abcdef (key)
+*/ 
 int main(int argc, char const *argv[]) {
     /* code */
     //sizeof(TEST_PLAIN) 有 \0, 多一个字节，所以加密是传 strlen(TEST_PLAIN)=13
@@ -21,7 +26,9 @@ int main(int argc, char const *argv[]) {
     // char TEST_PLAIN[13] = {'h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd', ' ', '!'};
     // char TEST_PLAIN[] = "6bc1bee22e409f96e93d7e117393172aae2d8a571e03ac9c9eb76fac45af8e5130c81c46a35ce411e5fbc1191a0a52eff69f2445df4f9b17ad2b417be66c3710";
     char AES128_CFB_TEST_CIPHER[] = "3b3fd92eb72dad20333449f8e83cfb4ac8a64537a0b3a93fcde3cdad9f1ce58b26751f67a3cbb140b1808cf187a4f4dfc04b05357c5d1c0eeac4c66f9ff7f2e6";
-    char AES128_CFB_TEST_IV[] = "000102030405060708090a0b0c0d0e0f";
+    // char AES128_CFB_TEST_IV[] = "000102030405060708090a0b0c0d0e0f";
+    //自定义 IV，不需要反解 hexstring
+    char AES128_CFB_TEST_IV[16] = {'e', 'a', '5', '6', 'c', 'a', '8', '3', '7', '4', 'd', '5', 'e', '5', '9', '2'};
 
     uint8_t plain[4*16], iv_or_nonce[16], cipher[4*16], output[4*16];
     void (*encrypt)(const uint8_t iv[16], const uint8_t* m,
@@ -30,7 +37,8 @@ int main(int argc, char const *argv[]) {
         size_t len, uint8_t* c) = NULL;
 
     // read_hex(TEST_PLAIN, plain, 4*16, "plain");
-    read_hex(AES128_CFB_TEST_IV, iv_or_nonce, 16, "iv-or-nonce");
+    memcpy(iv_or_nonce, AES128_CFB_TEST_IV, sizeof(AES128_CFB_TEST_IV));
+    // read_hex(AES128_CFB_TEST_IV, iv_or_nonce, 16, "iv-or-nonce");
     // read_hex(AES128_CFB_TEST_CIPHER, cipher, 4*16, "cipher");
 
     encrypt = &aes_whitebox_encrypt_cfb;

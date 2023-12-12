@@ -77,4 +77,4 @@ aes128_tests: aes_whitebox_compiler
 # 	./$@ ctr $(TEST_PLAIN) $(AES256_CTR_TEST_NONCE) $(AES256_CTR_TEST_CIPHER)
 
 clean:
-	rm -f *.o *.a aes_whitebox_tables.cc aes_whitebox_compiler aes128_tests aes192_tests aes256_tests
+	rm -f *.o *.a aes_whitebox_tables.cc aes_whitebox_compiler aes128_tests aes192_tests aes256_tests *.out
