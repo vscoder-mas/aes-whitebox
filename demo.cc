@@ -50,15 +50,35 @@ int main(int argc, char const *argv[]) {
     // (*decrypt)(iv_or_nonce, cipher, sizeof(cipher), output);
     // printf("Decrypt, vector #1 ret:%d\n", memcmp(output, plain, sizeof(plain)));
 
-    uint8_t cipher1[16] = {0};
+    // uint8_t cipher1[16] = {0};
+    uint32_t left = sizeof(TEST_PLAIN) / 16;
+    uint32_t padding = (16 - left);
+    size_t block = sizeof(TEST_PLAIN) + padding;
+    uint8_t *cipher1 = (uint8_t *) malloc(block);
+    memset(cipher1, 0, block);
+
     // (*encrypt)(iv_or_nonce, (uint8_t *)TEST_PLAIN, sizeof(TEST_PLAIN), cipher1);
     (*encrypt)(iv_or_nonce, (uint8_t *)TEST_PLAIN, strlen(TEST_PLAIN), cipher1);
-    uint8_t origin[16] = {0};
-    (*decrypt)(iv_or_nonce, cipher1, sizeof(cipher1), origin);
+
+    // uint8_t origin[16] = {0};
+    uint8_t *origin = (uint8_t *) malloc(block);
+    memset(origin, 0, block);
+    // (*decrypt)(iv_or_nonce, cipher1, sizeof(cipher1), origin);
+    (*decrypt)(iv_or_nonce, cipher1, block, origin);
 
     // for (int i = 0; i < sizeof(TEST_PLAIN); i++) {
     for (int i = 0; i < strlen(TEST_PLAIN); i++) {
         printf("%c\n", origin[i]);
+    }
+
+    if (NULL != cipher1) {
+      free(cipher1);
+      cipher1 = NULL;
+    }
+
+    if (NULL != origin) {
+      free(origin);
+      origin = NULL;
     }
 
     return 0;
