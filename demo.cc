@@ -69,9 +69,10 @@ int main(int argc, char const *argv[]) {
 
     // for (int i = 0; i < sizeof(TEST_PLAIN); i++) {
     for (int i = 0; i < strlen(TEST_PLAIN); i++) {
-        printf("%c\n", origin[i]);
+        printf("%c", origin[i]);
     }
 
+    printf("\n");
     if (NULL != cipher1) {
       free(cipher1);
       cipher1 = NULL;
