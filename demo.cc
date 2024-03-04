@@ -18,6 +18,7 @@ static void read_hex(const char *in, uint8_t* v, size_t size, const char* param_
  * 自定义生成 aes_whitebox_tables.cc 
  * g++ aes_whitebox_compiler.cc -o aes_whitebox_compiler -lntl -std=c++11
  * ./aes_whitebox_compiler aes128 60bd4de930f4f63d1234567890abcdef (key)
+ * g++ demo.cc aes_whitebox_tables.cc aes_whitebox.cc -o demo.out -std=c++11
 */ 
 int main(int argc, char const *argv[]) {
     /* code */
