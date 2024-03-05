@@ -52,7 +52,7 @@ int main(int argc, char const *argv[]) {
     // printf("Decrypt, vector #1 ret:%d\n", memcmp(output, plain, sizeof(plain)));
 
     // uint8_t cipher1[16] = {0};
-    uint32_t left = sizeof(TEST_PLAIN) / 16;
+    uint32_t left = sizeof(TEST_PLAIN) % 16;
     uint32_t padding = (16 - left);
     size_t block = sizeof(TEST_PLAIN) + padding;
     uint8_t *cipher1 = (uint8_t *) malloc(block);
