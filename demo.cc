@@ -52,9 +52,9 @@ int main(int argc, char const *argv[]) {
     // printf("Decrypt, vector #1 ret:%d\n", memcmp(output, plain, sizeof(plain)));
 
     // uint8_t cipher1[16] = {0};
-    uint32_t left = sizeof(TEST_PLAIN) % 16;
+    uint32_t left = strlen(TEST_PLAIN) % 16;
     uint32_t padding = (16 - left);
-    size_t block = sizeof(TEST_PLAIN) + padding;
+    size_t block = strlen(TEST_PLAIN) + padding;
     uint8_t *cipher1 = (uint8_t *) malloc(block);
     memset(cipher1, 0, block);
 
@@ -66,6 +66,10 @@ int main(int argc, char const *argv[]) {
     memset(origin, 0, block);
     // (*decrypt)(iv_or_nonce, cipher1, sizeof(cipher1), origin);
     (*decrypt)(iv_or_nonce, cipher1, block, origin);
+
+    //非常重要!!! whitebox encrypt/decrypt 接口没有返回字节数，按 cipher's block，结尾会有乱码 origin="hello world !t";
+    std::string ret((char *)origin, strlen(TEST_PLAIN));
+    std::cout << "- ret:" << ret << std::endl;
 
     // for (int i = 0; i < sizeof(TEST_PLAIN); i++) {
     for (int i = 0; i < strlen(TEST_PLAIN); i++) {
