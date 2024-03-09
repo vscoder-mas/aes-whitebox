@@ -66,6 +66,10 @@ int main(int argc, char const *argv[]) {
     (*decrypt)(iv_or_nonce, cipher1, block, origin);
 
     //非常重要!!! whitebox encrypt/decrypt 接口没有返回字节数，按 cipher's block，结尾会有乱码 ext:origin="hello world !t";
+    //原因时 encrypt 时，传入的加密 size 是实际大小，所以超出的部分 decrypt 后，就成了未定义值。解决这种问题可以通过一下方式:
+    //encrypt 的 size 也是 16 的倍数，然后 memset(0)，加密这个 size，即将补齐的字节也参与 encrypt; 当 decrypt 时，解密后的补齐
+    //字节('\0')，视情况判断: 如果返回的字符串，那么需要将末尾的 \0 去掉(跨语言接口pb->bytes); 如果需要的是二进制数据，就返回补齐的 size-> block
+    //详见: long-link: core_manager.cc
     std::string ret((char *)origin, strlen(TEST_PLAIN));
     std::cout << "- ret:" << ret << std::endl;
     //由于加密的是sizeof(TEST_PLAIN)，包含\0，所以下面的转字符串没有问题
