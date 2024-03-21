@@ -9,4 +9,4 @@ aes_whitebox_tables.cc
 vgcore.*
 *.out
 .vscode
-build
+
